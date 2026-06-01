@@ -2,7 +2,7 @@ import { useEffect, useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { getUserEnrollments } from '../api/enrollmentApi';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api/axios';
 
 function MyEnrollments() {
   const { user } = useContext(AuthContext);
@@ -24,10 +24,9 @@ function MyEnrollments() {
         data.map(async (enrollment) => {
 
           const progressResponse =
-            await axios.get(
-              `http://localhost:3000/courses/${enrollment.course.id}/progress/${user.id}`
-            );
-
+  await api.get(
+    `/courses/${enrollment.course.id}/progress/${user.id}`
+  );
           return {
             ...enrollment,
             progress:
