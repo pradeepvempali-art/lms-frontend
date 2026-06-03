@@ -37,6 +37,7 @@ const navigate = useNavigate();
 
   const fetchQuiz = async () => {
     try {
+      console.log("URL Slug =", slug);
       const data =
 await getQuizByCourse(slug);
         console.log(data);

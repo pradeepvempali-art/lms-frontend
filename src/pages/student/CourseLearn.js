@@ -25,6 +25,7 @@ function CourseLearn() {
     );
 
     const course = response.data;
+    console.log("COURSE DATA:", course);
 
     // collect all lessons from sections
     const allLessons =
@@ -179,11 +180,11 @@ function CourseLearn() {
 
         <div className="mt-4">
   <Link
-    to={`/quiz/${courseId}`}
-    className="btn btn-warning"
-  >
-    Take Quiz
-  </Link>
+  to={`/quiz/${selectedLesson?.courseId}`}
+  className="btn btn-warning"
+>
+  Take Quiz
+</Link>
 </div>
       </div>
     </div>
