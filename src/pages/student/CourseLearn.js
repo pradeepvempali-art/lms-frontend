@@ -1,9 +1,9 @@
-import { useEffect, useState, useContext } from 'react';
-import { useParams } from 'react-router-dom';
-import { AuthContext } from '../../context/AuthContext';
-import { markLessonCompleted } from '../../api/lessonProgressApi';
-import { Link } from 'react-router-dom';
-import api from '../../api/axios';
+import { useEffect, useState, useContext } from "react";
+import { useParams } from "react-router-dom";
+import { AuthContext } from "../../context/AuthContext";
+import { markLessonCompleted } from "../../api/lessonProgressApi";
+import { Link } from "react-router-dom";
+import api from "../../api/axios";
 function CourseLearn() {
   const { courseId } = useParams();
   const { user } = useContext(AuthContext);
@@ -12,7 +12,7 @@ function CourseLearn() {
   const [selectedLesson, setSelectedLesson] = useState(null);
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const [completing, setCompleting] = useState(false);
 
   useEffect(() => {
@@ -20,62 +20,52 @@ function CourseLearn() {
   }, [courseId]);
 
   const fetchLessons = async () => {
-  try {
-    const response = await api.get(
-      `/courses/${courseId}`,
-    );
+    try {
+      const response = await api.get(`/courses/${courseId}`);
 
-    const course = response.data;
-    setCourse(courseData);
-    console.log(course);
+      const courseData = response.data;
 
-    // collect all lessons from sections
-    const allLessons =
-      course.sections.flatMap(
-        (section) => section.lessons,
-      );
+      setCourse(courseData);
 
-    setLessons(allLessons);
+      console.log(courseData);
+      // collect all lessons from sections
+      const allLessons = course.sections.flatMap((section) => section.lessons);
 
-    if (allLessons.length > 0) {
-      setSelectedLesson(allLessons[0]);
+      setLessons(allLessons);
+
+      if (allLessons.length > 0) {
+        setSelectedLesson(allLessons[0]);
+      }
+    } catch (error) {
+      console.error("Error fetching lessons:", error);
+    } finally {
+      setLoading(false);
     }
-  } catch (error) {
-    console.error(
-      'Error fetching lessons:',
-      error,
-    );
-  } finally {
-    setLoading(false);
-  }
-};
+  };
   const handleCompleteLesson = async () => {
     if (!user) {
-      setMessage('Please login first.');
+      setMessage("Please login first.");
       return;
     }
 
     if (!selectedLesson) {
-      setMessage('Please select a lesson.');
+      setMessage("Please select a lesson.");
       return;
     }
 
     try {
       setCompleting(true);
-      setMessage('');
+      setMessage("");
 
       const result = await markLessonCompleted({
         userId: user.id,
         lessonId: selectedLesson.id,
       });
 
-      setMessage(
-        result.message || 'Lesson marked as completed.'
-      );
+      setMessage(result.message || "Lesson marked as completed.");
     } catch (error) {
       setMessage(
-        error.response?.data?.message ||
-          'Failed to mark lesson as completed.'
+        error.response?.data?.message || "Failed to mark lesson as completed.",
       );
     } finally {
       setCompleting(false);
@@ -91,26 +81,22 @@ function CourseLearn() {
   }
 
   if (loading) {
-  return (
-    <div className="container mt-5">
-      <h3>Loading lessons...</h3>
-    </div>
-  );
-}
+    return (
+      <div className="container mt-5">
+        <h3>Loading lessons...</h3>
+      </div>
+    );
+  }
 
   const noLessons = lessons.length === 0;
 
   return (
-
-    
     <div className="container mt-4">
       {noLessons && (
-  <div className="mb-4">
-    <h3>
-      No lessons available for this course.
-    </h3>
-  </div>
-)}
+        <div className="mb-4">
+          <h3>No lessons available for this course.</h3>
+        </div>
+      )}
       <div className="row">
         {/* Left Side: Video Player */}
         <div className="col-md-8">
@@ -129,15 +115,12 @@ function CourseLearn() {
               <p>{selectedLesson.description}</p>
 
               <p>
-                <strong>Duration:</strong>{' '}
-                {selectedLesson.duration} minutes
+                <strong>Duration:</strong> {selectedLesson.duration} minutes
               </p>
 
               {/* Success/Error Message */}
               {message && (
-                <div className="alert alert-info mt-3">
-                  {message}
-                </div>
+                <div className="alert alert-info mt-3">{message}</div>
               )}
 
               {/* Mark Completed Button */}
@@ -146,15 +129,11 @@ function CourseLearn() {
                 onClick={handleCompleteLesson}
                 disabled={completing}
               >
-                {completing
-                  ? 'Saving...'
-                  : 'Mark as Completed'}
+                {completing ? "Saving..." : "Mark as Completed"}
               </button>
             </>
           )}
         </div>
-
-        
 
         {/* Right Side: Lesson List */}
         <div className="col-md-4">
@@ -165,13 +144,11 @@ function CourseLearn() {
               <button
                 key={lesson.id}
                 className={`list-group-item list-group-item-action ${
-                  selectedLesson?.id === lesson.id
-                    ? 'active'
-                    : ''
+                  selectedLesson?.id === lesson.id ? "active" : ""
                 }`}
                 onClick={() => {
                   setSelectedLesson(lesson);
-                  setMessage('');
+                  setMessage("");
                 }}
               >
                 Lesson {index + 1}: {lesson.title}
@@ -181,13 +158,10 @@ function CourseLearn() {
         </div>
 
         <div className="mt-4">
-  <Link
-  to={`/quiz/${course?.slug}`}
-  className="btn btn-warning"
->
-  Take Quiz
-</Link>
-</div>
+          <Link to={`/quiz/${course?.slug}`} className="btn btn-warning">
+            Take Quiz
+          </Link>
+        </div>
       </div>
     </div>
   );
