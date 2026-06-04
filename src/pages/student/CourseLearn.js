@@ -10,6 +10,7 @@ function CourseLearn() {
 
   const [lessons, setLessons] = useState([]);
   const [selectedLesson, setSelectedLesson] = useState(null);
+  const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState('');
   const [completing, setCompleting] = useState(false);
@@ -25,7 +26,8 @@ function CourseLearn() {
     );
 
     const course = response.data;
-    console.log("COURSE DATA:", course);
+    setCourse(courseData);
+    console.log(course);
 
     // collect all lessons from sections
     const allLessons =
@@ -180,7 +182,7 @@ function CourseLearn() {
 
         <div className="mt-4">
   <Link
-  to={`/quiz/${selectedLesson?.courseId}`}
+  to={`/quiz/${course?.slug}`}
   className="btn btn-warning"
 >
   Take Quiz
