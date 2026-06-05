@@ -25,17 +25,21 @@ function CourseLearn() {
 
       const courseData = response.data;
 
-      setCourse(courseData);
+setCourse(courseData);
 
-      console.log(courseData);
-      // collect all lessons from sections
-      const allLessons = course.sections.flatMap((section) => section.lessons);
+console.log("COURSE DATA:", courseData);
 
-      setLessons(allLessons);
+const allLessons =
+  courseData.sections.flatMap(
+    (section) => section.lessons,
+  );
+  console.log("LESSONS:", allLessons);
 
-      if (allLessons.length > 0) {
-        setSelectedLesson(allLessons[0]);
-      }
+setLessons(allLessons);
+
+if (allLessons.length > 0) {
+  setSelectedLesson(allLessons[0]);
+}
     } catch (error) {
       console.error("Error fetching lessons:", error);
     } finally {
