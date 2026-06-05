@@ -36,23 +36,20 @@ const navigate = useNavigate();
   }, []);
 
   const fetchQuiz = async () => {
-    try {
-      console.log("URL Slug =", slug);
-      const data =
-await getQuizByCourse(slug);
-        console.log(data);
+  try {
+    console.log("PARAM SLUG:", slug);
 
+    const data = await getQuizByCourse(slug);
 
-setQuiz(data[0]);
-    } catch (error) {
-      console.error(
-        'Error fetching quiz:',
-        error,
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+    console.log("QUIZZES FOUND:", data);
+
+    setQuiz(data[0]);
+  } catch (error) {
+    console.error("Error fetching quiz:", error);
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleOptionChange = (
     questionId,
